@@ -59,8 +59,8 @@ def experimento_original():
 
     #Etiquetas y título del gráfico
     plt.xlabel("Número de procesos")
-    plt.ylabel("TIempo promedio en el sistema")
-    plt.title("Simulación original: Tiempo promedio vs. Número de procesos")
+    plt.ylabel("Tiempo promedio en el sistema")
+    plt.title("Simulación original")
     plt.legend()
     plt.grid(True)
     plt.show()
