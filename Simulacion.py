@@ -31,3 +31,28 @@ def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVel
         env.process(proceso(env, f"Proceso_{i}", RAM, cpu, CPUVelocidad, tiempos)) #Se crea un nuevo proceso pasándole los parámetros necesarios para cada iteración del ciclo
         yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
 
+
+def experimento_original():
+    procesos_lista = [25, 50, 100, 200]
+    intervalos = [10, 5, 1]
+    resultados = {}
+
+    for intervalo in intervalos:
+        resultados[intervalo] = []
+        for num in procesos_lista:
+            prom, desv, _ = simulacion(num,intervalo)
+            resultados[intervalo].append((num, prom, desv))
+            print(f"Intervalo: {intervalo}, Procesos: {num} -- Tiempo Promedio: {prom:.2f}, Desviación {desv:.2f}")
+
+    plt.figure(figsize = (8,6))
+    for intervalo in intervalos:
+        x= [dato[0]  for dato in resultados[intervalo]]
+        y= [dato[1] for dato in resultados[intervalo]]
+        yerr = [dato[1] for dato in resultados[intervalo]]
+
+    plt.xlabel("Número de procesos")
+    plt.ylabel("TIempo promedio en el sistema")
+    plt.title("Simulación original: Tiempo promedio vs. Número de procesos")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
