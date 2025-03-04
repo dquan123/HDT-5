@@ -32,24 +32,31 @@ def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVel
         yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
 
 
+#Función para que se ejecuten simulaciones con diferenstes valores de prueba de procesos e intervalos de llegadom graficando los resultados
 def experimento_original():
-    procesos_lista = [25, 50, 100, 200]
-    intervalos = [10, 5, 1]
-    resultados = {}
+    procesos_lista = [25, 50, 100, 200] #Cantidades de procesos a evaluar de prueba
+    intervalos = [10, 5, 1] #Diferentes intervalos de llegada de prueba
+    resultados = {} #Diccionario para almacenar los resultados de cada intervalo
 
+    #Ciclo para realizar simulaciones por cada intervalo de llegada
     for intervalo in intervalos:
-        resultados[intervalo] = []
-        for num in procesos_lista:
-            prom, desv, _ = simulacion(num,intervalo)
-            resultados[intervalo].append((num, prom, desv))
-            print(f"Intervalo: {intervalo}, Procesos: {num} -- Tiempo Promedio: {prom:.2f}, Desviación {desv:.2f}")
+        resultados[intervalo] = [] #Lista de resultados para cada intervalo
 
+        # Se prueban los distintos valores de procesos en una simulación
+        for num in procesos_lista:
+            prom, desv, _ = simulacion(num,intervalo) #Se realiza una simulación con el valor de proceso e intervalo actual
+            resultados[intervalo].append((num, prom, desv)) #Se guarda en resultados el núemro de procesos actual y los resultados obtenidos
+            print(f"Intervalo: {intervalo}, Procesos: {num} -- Tiempo Promedio: {prom:.2f}, Desviación {desv:.2f}") #Mostrar resultados
+
+    #Gráfico de los resultados
     plt.figure(figsize = (8,6))
     for intervalo in intervalos:
         x= [dato[0]  for dato in resultados[intervalo]]
         y= [dato[1] for dato in resultados[intervalo]]
         yerr = [dato[1] for dato in resultados[intervalo]]
+        plt.errorbar(x, y, yerr= yerr, marker ="o", capsize = 5, label=f"Intervalo {intervalo}")
 
+    #Etiquetas y título del gráfico
     plt.xlabel("Número de procesos")
     plt.ylabel("TIempo promedio en el sistema")
     plt.title("Simulación original: Tiempo promedio vs. Número de procesos")
