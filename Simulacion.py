@@ -25,3 +25,9 @@ def proceso(env, nombre, RAM, cpu, CPUVelocidad, tiempos):
     yield RAM.put(mem_requerida) #Una vex terminado, libera la memoria solicitada
     tiempos.append(env.now - llegada) #Se calcula el tiempo total que el proceso estuvo en el sistema
 
+#Esta función crea los procesos de forma secuencial
+def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVelocidad, tiempos): #Recibe los parámetros de las estrategias y la cantidad de procesos a ejecutar
+    for i in range(numero_procesos): #Se recorre un ciclo para la cantidad de procesos (ya que se va simulando 1 por 1)
+        env.process(proceso(env, f"Proceso_{i}", RAM, cpu, CPUVelocidad, tiempos)) #Se crea un nuevo proceso pasándole los parámetros necesarios para cada iteración del ciclo
+        yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
+
