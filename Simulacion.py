@@ -50,11 +50,12 @@ def experimento_original():
 
     #Gráfico de los resultados
     plt.figure(figsize = (8,6))
+    #Se obtiene los resultados por cada intervalo de llegada para graficarlos
     for intervalo in intervalos:
-        x= [dato[0]  for dato in resultados[intervalo]]
-        y= [dato[1] for dato in resultados[intervalo]]
+        x= [dato[0]  for dato in resultados[intervalo]] #En eje x se grafican los números de procesos
+        y= [dato[1] for dato in resultados[intervalo]] #En eje y aparecen los tiempos promedio que duró la simulación
         yerr = [dato[1] for dato in resultados[intervalo]]
-        plt.errorbar(x, y, yerr= yerr, marker ="o", capsize = 5, label=f"Intervalo {intervalo}")
+        plt.errorbar(x, y, yerr= yerr, marker ="o", capsize = 5, label=f"Intervalo {intervalo}") #Se muestra las desviaciones estandar
 
     #Etiquetas y título del gráfico
     plt.xlabel("Número de procesos")
