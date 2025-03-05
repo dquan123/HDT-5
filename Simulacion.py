@@ -32,16 +32,16 @@ def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVel
         yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
 
 def simulacion(numero_procesos, intervalo_llegada, tamano_memoria=100, CPUVelocidad=3, cantCPU=1, semilla=42):
-    random.seed(semilla) #
-    env = simpy.Environment()
-    RAM = simpy.Container(env, init=tamano_memoria, capacity=tamano_memoria)
-    cpu = simpy.Resource(env, capacity=cantCPU)
+    random.seed(semilla) #Se fija la semilla
+    env = simpy.Environment() #Se crea el entorno SimPy
+    RAM = simpy.Container(env, init=tamano_memoria, capacity=tamano_memoria) #Se define la RAM usando container y con la capacidad igual al tamano de la memoria
+    cpu = simpy.Resource(env, capacity=cantCPU) #Se define CPU con su respectiva capacidad usando un Resource
     tiempos = []
-    env.process(generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVelocidad, tiempos))
-    env.run()
-    promedio = statistics.mean(tiempos)
-    desviacion = statistics.stdev(tiempos) if len(tiempos) > 1 else 0
-    return promedio, desviacion, tiempos
+    env.process(generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVelocidad, tiempos)) #Se inicia el generador de procesos
+    env.run() #Se ejecuta la simualcion
+    promedio = statistics.mean(tiempos) #Se calcula el tiempo promedio
+    desviacion = statistics.stdev(tiempos) if len(tiempos) > 1 else 0 #Se calcula la desviacion estandar
+    return promedio, desviacion, tiempos #Devuelve promedio, desviacion y tiempos.
 
 
 #Función para que se ejecuten simulaciones con diferenstes valores de prueba de procesos e intervalos de llegadom graficando los resultados
