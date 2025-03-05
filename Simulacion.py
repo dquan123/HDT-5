@@ -32,7 +32,7 @@ def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVel
         yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
 
 def simulacion(numero_procesos, intervalo_llegada, tamano_memoria=100, CPUVelocidad=3, cantCPU=1, semilla=42):
-    random.seed(semilla)
+    random.seed(semilla) #
     env = simpy.Environment()
     RAM = simpy.Container(env, init=tamano_memoria, capacity=tamano_memoria)
     cpu = simpy.Resource(env, capacity=cantCPU)
