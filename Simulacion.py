@@ -130,3 +130,9 @@ def experimento_mejoras():
         # Mostrar la gráfica generada
         plt.show()
 
+if __name__ == "__main__":
+    print("==== SIMULACIÓN ORIGINAL ====")
+    experimento_original()
+    
+    print("\n==== SIMULACIÓN CON ESTRATEGIAS DE MEJORA ====")
+    experimento_mejoras()
