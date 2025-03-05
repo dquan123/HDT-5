@@ -78,31 +78,55 @@ def experimento_original():
     plt.show()
 
 def experimento_mejoras():
+    # Definición de estrategias de mejora con diferentes configuraciones de memoria, velocidad de CPU y cantidad de CPUs
     estrategias = {
-        "Memoria 200": (200, 3, 1),
-        "CPU más rápido (6 instr.)": (100, 6, 1),
-        "2 CPUs": (100, 3, 2)
+        "Memoria 200": (200, 3, 1),  # 200 de memoria, velocidad de CPU 3, 1 CPU
+        "CPU más rápido (6 instr.)": (100, 6, 1),  # 100 de memoria, velocidad de CPU 6, 1 CPU
+        "2 CPUs": (100, 3, 2)  # 100 de memoria, velocidad de CPU 3, 2 CPUs
     }
+    
+    # Lista con diferentes cantidades de procesos a simular
     procesos_lista = [25, 50, 100, 150, 200]
+    
+    # Lista con diferentes intervalos de llegada de los procesos
     intervalos = [10, 5, 1]
     
+    # Iterar sobre cada estrategia definida
     for nombre, (tamano, velocidad, cpus) in estrategias.items():
-        print(f"\n=== Estrategia: {nombre} ===")
-        resultados = {}
+        print(f"\n=== Estrategia: {nombre} ===")  # Imprimir el nombre de la estrategia actual
+        resultados = {}  # Diccionario para almacenar los resultados de cada intervalo
+        
+        # Iterar sobre cada intervalo de llegada
         for intervalo in intervalos:
-            resultados[intervalo] = []
-            print(f"\n>>> Intervalo de llegada: {intervalo}")
+            resultados[intervalo] = []  # Inicializar la lista de resultados para el intervalo actual
+            print(f"\n>>> Intervalo de llegada: {intervalo}")  # Mostrar el intervalo actual
+            
+            # Iterar sobre cada cantidad de procesos en la lista
             for num in procesos_lista:
+                # Llamar a la función simulación con los parámetros actuales
                 prom, desv, _ = simulacion(num, intervalo, tamano_memoria=tamano, CPUVelocidad=velocidad, cantCPU=cpus)
+                
+                # Guardar los resultados en el diccionario
                 resultados[intervalo].append((num, prom, desv))
+                
+                # Imprimir los resultados obtenidos
                 print(f"Procesos: {num} -> Tiempo Promedio: {prom:.2f}, Desviación: {desv:.2f}")
-            x = [dato[0] for dato in resultados[intervalo]]
-            y = [dato[1] for dato in resultados[intervalo]]
-            yerr = [dato[2] for dato in resultados[intervalo]]
+            
+            # Extraer valores para graficar
+            x = [dato[0] for dato in resultados[intervalo]]  # Número de procesos
+            y = [dato[1] for dato in resultados[intervalo]]  # Tiempo promedio
+            yerr = [dato[2] for dato in resultados[intervalo]]  # Desviación estándar
+            
+            # Crear gráfico con barras de error
             plt.errorbar(x, y, yerr=yerr, marker='o', capsize=5, label=f"Intervalo {intervalo}")
+        
+        # Configuración del gráfico
         plt.xlabel("Número de procesos")
         plt.ylabel("Tiempo promedio en el sistema")
         plt.title(f"Estrategia: {nombre}")
         plt.legend()
         plt.grid(True)
+        
+        # Mostrar la gráfica generada
         plt.show()
+
