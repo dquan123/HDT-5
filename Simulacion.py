@@ -31,6 +31,18 @@ def generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVel
         env.process(proceso(env, f"Proceso_{i}", RAM, cpu, CPUVelocidad, tiempos)) #Se crea un nuevo proceso pasándole los parámetros necesarios para cada iteración del ciclo
         yield env.timeout(random.expovariate(1.0/intervalo_llegada)) #Luego de que se calculó el tiempo, esto hace que se espere ese tiempo antes de crear el siguiente proceso
 
+def simulacion(numero_procesos, intervalo_llegada, tamano_memoria=100, CPUVelocidad=3, cantCPU=1, semilla=42):
+    random.seed(semilla)
+    env = simpy.Environment()
+    RAM = simpy.Container(env, init=tamano_memoria, capacity=tamano_memoria)
+    cpu = simpy.Resource(env, capacity=cantCPU)
+    tiempos = []
+    env.process(generador_procesos(env, numero_procesos, intervalo_llegada, RAM, cpu, CPUVelocidad, tiempos))
+    env.run()
+    promedio = statistics.mean(tiempos)
+    desviacion = statistics.stdev(tiempos) if len(tiempos) > 1 else 0
+    return promedio, desviacion, tiempos
+
 
 #Función para que se ejecuten simulaciones con diferenstes valores de prueba de procesos e intervalos de llegadom graficando los resultados
 def experimento_original():
