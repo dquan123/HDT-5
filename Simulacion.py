@@ -76,3 +76,33 @@ def experimento_original():
     plt.legend()
     plt.grid(True)
     plt.show()
+
+def experimento_mejoras():
+    estrategias = {
+        "Memoria 200": (200, 3, 1),
+        "CPU más rápido (6 instr.)": (100, 6, 1),
+        "2 CPUs": (100, 3, 2)
+    }
+    procesos_lista = [25, 50, 100, 150, 200]
+    intervalos = [10, 5, 1]
+    
+    for nombre, (tamano, velocidad, cpus) in estrategias.items():
+        print(f"\n=== Estrategia: {nombre} ===")
+        resultados = {}
+        for intervalo in intervalos:
+            resultados[intervalo] = []
+            print(f"\n>>> Intervalo de llegada: {intervalo}")
+            for num in procesos_lista:
+                prom, desv, _ = simulacion(num, intervalo, tamano_memoria=tamano, CPUVelocidad=velocidad, cantCPU=cpus)
+                resultados[intervalo].append((num, prom, desv))
+                print(f"Procesos: {num} -> Tiempo Promedio: {prom:.2f}, Desviación: {desv:.2f}")
+            x = [dato[0] for dato in resultados[intervalo]]
+            y = [dato[1] for dato in resultados[intervalo]]
+            yerr = [dato[2] for dato in resultados[intervalo]]
+            plt.errorbar(x, y, yerr=yerr, marker='o', capsize=5, label=f"Intervalo {intervalo}")
+        plt.xlabel("Número de procesos")
+        plt.ylabel("Tiempo promedio en el sistema")
+        plt.title(f"Estrategia: {nombre}")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
